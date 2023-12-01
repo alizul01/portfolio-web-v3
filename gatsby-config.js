@@ -4,7 +4,7 @@ module.exports = {
   siteMetadata: {
     title: 'Ali Zulfikar',
     description:
-      'Ali Zulfikar is a software engineer who specializes in building (and occasionally designing) exceptional digital experiences.',
+      'Ali Zulfikar is a game developer and web developer based in Malang, Indonesia. He is a student at Politeknik Negeri Malang.',
     siteUrl: 'https://alizul01.my.id', // No trailing slash allowed!
     image: '/bg.png', // Path to your image you placed in the 'static' folder
     twitterUsername: '@panggilajazul',
