@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled, { css } from 'styled-components';
 import { navLinks } from '@config';
-import { MainImage, StaticImage } from 'gatsby-plugin-image';
+import { StaticImage } from 'gatsby-plugin-image';
 import { loaderDelay } from '@utils';
 import { useScrollDirection, usePrefersReducedMotion } from '@hooks';
 import { Menu } from '@components';
-import { IconLogo, IconHex } from '@components/icons';
 
 const StyledHeader = styled.header`
   ${({ theme }) => theme.mixins.flexBetween};
@@ -187,19 +186,19 @@ const Nav = ({ isHome }) => {
       {isHome ? (
         <a href="/" aria-label="home">
           <div className="hex-container">
-            <MainImage src="/logo.png" alt="logo" />
+            <StaticImage src="image/logo.png" alt="logo" />
           </div>
           <div className="logo-container">
-            <MainImage src="/logo.png" alt="logo" />
+            <StaticImage src="image/logo.png" alt="logo" />
           </div>
         </a>
       ) : (
         <Link to="/" aria-label="home">
           <div className="hex-container">
-            <MainImage src="/logo.png" alt="logo" />
+            <StaticImage src="image/logo.png" alt="logo" />
           </div>
           <div className="logo-container">
-            <MainImage src="/logo.png" alt="logo" />
+            <StaticImage src="image/logo.png" alt="logo" />
           </div>
         </Link>
       )}
