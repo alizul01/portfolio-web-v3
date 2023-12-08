@@ -27,10 +27,11 @@ const StyledProjectsSection = styled.section`
   .projects-grid {
     ${({ theme }) => theme.mixins.resetList};
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     grid-gap: 15px;
     position: relative;
     margin-top: 50px;
+    width: 100%;
 
     @media (max-width: 1080px) {
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -246,6 +247,7 @@ const Projects = () => {
               {title}
             </a>
           </h3>
+
 
           <div className="project-description" dangerouslySetInnerHTML={{ __html: html }} />
         </header>
