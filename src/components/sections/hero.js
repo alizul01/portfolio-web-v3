@@ -59,7 +59,7 @@ const Hero = () => {
     return () => clearTimeout(timeout);
   }, []);
 
-  const one = <h1>Hi there, Nice to meet you!</h1>;
+  const one = <h1>Hi there, Nice to meet you~</h1>;
   const two = <h2 className="big-heading">M. Ali Zulfikar</h2>;
   const three = <h3 className="big-heading">Game Developer Associate</h3>;
   const four = (
