@@ -125,7 +125,7 @@ const About = () => {
     sr.reveal(revealContainer.current, srConfig());
   }, []);
 
-  const skills = ['Unity', 'Next JS', 'C-Sharp', 'Typescript', 'Blender 3D', 'Tailwind CSS'];
+  const skills = ['Unity (mainly)', 'C#', 'Game Design', 'Unreal Engine 4 (learning)', 'Blender 3D', 'React/Next.js'];
 
   return (
     <StyledAboutSection id="about" ref={revealContainer}>
@@ -135,30 +135,33 @@ const About = () => {
         <StyledText>
           <div>
             <p>
-              Hello! My name is Ali Zulfikar, and I have a passion for game and website development. I possess skills in leadership, teamwork, and public speaking. I'm a creative, innovative, and adaptive individual. Recently
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              Hello! I'm <a> Ali Zulfikar </a>, a game developer associate with a passion for creating impactful game
+              experiences.
+              I've been develop my soft and technical skills in game development, leadership, and also public speaking.
             </p>
 
             <p>
-              I have several of achievement in the field of Game Development and Innovation. Such as {' '}
+              In 2025, I've fully committed to game development and I am currently building {' '}
+              <a href="https://ariversestudio.com"> Ariverse Studio</a> as a leader and general management thingy.
+            </p>
+
+            <p>
+              My journey has been marked by several achievements in Game Development and Innovation, including{' '}
+              <a href="https://www.credly.com/badges/9e9e5e79-777a-4c78-835a-493b643e3478/linked_in_profile"> Unity Certified Associate: Game Developer </a>,{' '}
               <a href="https://gemastik.kemdikbud.go.id/">4th Winner Gemastik 2023</a>,{' '}
-              <a href="https://kmipn.pens.ac.id/">Special Reward KMIPN 2023 </a>,{' '}
-              <a href="https://kompetisi4c.ub.ac.id/">3rd Winner 4C Competition</a>, and{' '}
-              <a href={'https://igdx.id'}>Indonesia Game Developer Exchange 2023 (IGDX 2023)</a>. My
-              main focus right now is develop my skills in Game Development and Web Development.
+              <a href="https://kompetisi4c.ub.ac.id/">3rd Winner 4C Competition</a>, and participation in{' '}
+              <a href="https://igdx.id">IGDX Business Pass 2024</a>.
             </p>
 
             <p>
-              I also recently being Mentee at{' '}
-              <a href="https://agate.id/">
-                Agate Course 2023
-              </a>{' '}
-              that educate me about AI Game Development using Unity. I Also building my own Game Studio called{' '}
-              <a href="https://www.instagram.com/enigmates.studio/" target="_blank" rel="noreferrer">
-                Enigmates Studio
-              </a>{' '}
+              Also, I had the opportunity to be a Mentee at{' '}
+              <a href="https://agate.id/">Agate Academy SI Batch 6</a>{' '}
+              which educated me about the game industry and how to be a professional game developer.
+              {' '}
             </p>
 
-            <p> Anyway, this is technology that I usually use for my project: </p>
+            <p>These are the technologies I'm currently working with:</p>
           </div>
 
           <ul className="skills-list">
@@ -173,8 +176,7 @@ const About = () => {
               src="../../images/me.jpg"
               width={500}
               quality={95}
-              formats={['AUTO', 'WEBP', 'AVIF']}
-              alt="Headshot"
+              alt="Profile picture"
             />
           </div>
         </StyledPic>

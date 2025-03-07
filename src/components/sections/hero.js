@@ -61,14 +61,16 @@ const Hero = () => {
 
   const one = <h1>Hi there, Great to see you!</h1>;
   const two = <h2 className="big-heading">M. Ali Zulfikar</h2>;
-  const three = <h3 className="big-heading">Informatics Engineer</h3>;
+  const three = <h3 className="big-heading">Game Developer Associate</h3>;
   const four = (
     <>
       <p>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        I'm a <a>Game Developer</a> and <a>Web Developer</a> Enthusiast based in Malang, Indonesia. I have a passion on
-        Game Development, Leadership , and Public Speaking. Currently, I'm focused on expand my knowledge
-        about Game Development.
+        I'm a passionate <a>Game Developer</a> and <a>Web Developer</a> based in Malang, Indonesia.
+        Currently a final year student at State Polytechnic of Malang with a strong focus on
+        leadership and public speaking. I'm dedicated to crafting engaging game development experiences
+        and building my game development studio with my team called
+        <a href={'https://www.ariversestudio.com'} target={'_blank'} rel="noreferrer">Ariverse Studio</a>.
       </p>
     </>
   );
@@ -78,7 +80,7 @@ const Hero = () => {
       href="https://www.linkedin.com/in/alizulfikar"
       target="_blank"
       rel="noreferrer">
-      Check my LinkedIn!
+      Connect on LinkedIn
     </a>
   );
 

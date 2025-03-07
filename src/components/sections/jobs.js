@@ -6,6 +6,7 @@ import { srConfig } from '@config';
 import { KEY_CODES } from '@utils';
 import sr from '@utils/sr';
 import { usePrefersReducedMotion } from '@hooks';
+import { Icon } from '@components/icons';
 
 const StyledJobsSection = styled.section`
   max-width: 700px;
@@ -86,8 +87,8 @@ const StyledTabButton = styled.button`
   }
   @media (max-width: 600px) {
     ${({ theme }) => theme.mixins.flexCenter};
-    min-width: 200px;
-    padding: 0 35px;
+    min-width: 120px;
+    padding: 0 15px;
     border-left: 0;
     border-bottom: 2px solid var(--lightest-navy);
     text-align: center;
@@ -156,11 +157,72 @@ const StyledTabPanel = styled.div`
     }
   }
 
+  .company-header {
+    color: var(--green);
+    margin-bottom: 10px;
+    font-size: var(--fz-xl);
+
+    a {
+      color: var(--green);
+    }
+  }
+
   .range {
     margin-bottom: 25px;
     color: var(--light-slate);
     font-family: var(--font-mono);
     font-size: var(--fz-xs);
+  }
+
+  .show-more-btn {
+    background: transparent;
+    border: none;
+    color: var(--green);
+    font-family: var(--font-mono);
+    font-size: var(--fz-sm);
+    cursor: pointer;
+    padding: 5px 0;
+    margin-top: 10px;
+    position: relative;
+
+    &:after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 1px;
+      position: relative;
+      bottom: -2px;
+      background-color: var(--green);
+      opacity: 0.5;
+      transition: all 0.2s ease;
+    }
+
+    &:hover:after {
+      width: 100%;
+    }
+  }
+
+  // Job content layout for all screen sizes
+  .job-content {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+
+    .job-icon {
+      flex-shrink: 0;
+      margin-right: 20px;
+      margin-top: 5px;
+      color: var(--green);
+
+      svg {
+        width: 22px;
+        height: 22px;
+      }
+    }
+
+    .job-details {
+      flex: 1;
+    }
   }
 `;
 
@@ -194,6 +256,7 @@ const Jobs = () => {
   const tabs = useRef([]);
   const revealContainer = useRef(null);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -201,6 +264,22 @@ const Jobs = () => {
     }
 
     sr.reveal(revealContainer.current, srConfig());
+  }, []);
+
+  useEffect(() => {
+    // Check if we're on mobile
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Set initial value
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const focusTab = () => {
@@ -242,61 +321,176 @@ const Jobs = () => {
     }
   };
 
+  // Function to determine which icon to use for the job
+  const getJobIcon = (company) => {
+    // You can customize this logic to map company names to specific icons
+    // For example, map specific companies to different icons
+    if (company.toLowerCase().includes('agate')) {
+      return 'GameController';
+    } else if (company.toLowerCase().includes('enigmates')) {
+      return 'Game';
+    } else if (company.toLowerCase().includes('state')) {
+      return 'Education';
+    }
+    // Default to a briefcase icon
+    return 'Briefcase';
+  };
+
+  // Function to handle the show more/less toggle for job descriptions on mobile
+  const JobDescription = ({ html }) => {
+    const [showAll, setShowAll] = useState(false);
+    const contentRef = useRef(null);
+
+    // Only do this processing on mobile
+    if (!isMobile) {
+      return <div dangerouslySetInnerHTML={{ __html: html }} />;
+    }
+
+    // Process HTML to extract list items
+    const processHTML = () => {
+      // Create a temporary div to parse the HTML
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+
+      // Find all list items
+      const listItems = temp.querySelectorAll('li');
+      const totalItems = listItems.length;
+
+      // If there are 3 or fewer items, no need for show more/less
+      if (totalItems <= 3) {
+        return {
+          fullHtml: html,
+          limitedHtml: html,
+          hasMore: false
+        };
+      }
+
+      // Create a copy of the HTML with only the first 3 list items
+      const tempLimited = temp.cloneNode(true);
+      const limitedListItems = tempLimited.querySelectorAll('li');
+
+      // Remove all list items after the third one
+      for (let i = 3; i < limitedListItems.length; i++) {
+        limitedListItems[i].remove();
+      }
+
+      return {
+        fullHtml: html,
+        limitedHtml: tempLimited.innerHTML,
+        hasMore: true
+      };
+    };
+
+    // Memoize this calculation to avoid reprocessing on every render
+    const { fullHtml, limitedHtml, hasMore } = React.useMemo(processHTML, [html]);
+
+    if (!hasMore) {
+      return <div dangerouslySetInnerHTML={{ __html: html }} />;
+    }
+
+    return (
+      <>
+        <div
+          ref={contentRef}
+          dangerouslySetInnerHTML={{ __html: showAll ? fullHtml : limitedHtml }}
+        />
+        {hasMore && (
+          <button
+            className="show-more-btn"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll ? 'Show Less' : 'Show All'}
+          </button>
+        )}
+      </>
+    );
+  };
+
   return (
     <StyledJobsSection id="jobs" ref={revealContainer}>
       <h2 className="numbered-heading">Past Experience</h2>
 
       <div className="inner">
-        <StyledTabList role="tablist" aria-label="Job tabs" onKeyDown={e => onKeyDown(e)}>
-          {jobsData &&
-            jobsData.map(({ node }, i) => {
-              const { company } = node.frontmatter;
-              return (
-                <StyledTabButton
-                  key={i}
-                  isActive={activeTabId === i}
-                  onClick={() => setActiveTabId(i)}
-                  ref={el => (tabs.current[i] = el)}
-                  id={`tab-${i}`}
-                  role="tab"
-                  tabIndex={activeTabId === i ? '0' : '-1'}
-                  aria-selected={activeTabId === i}
-                  aria-controls={`panel-${i}`}>
-                  <span>{company}</span>
-                </StyledTabButton>
-              );
-            })}
-          <StyledHighlight activeTabId={activeTabId} />
-        </StyledTabList>
+        {/* Only show tabs on desktop */}
+        {!isMobile && (
+          <StyledTabList role="tablist" aria-label="Job tabs" onKeyDown={e => onKeyDown(e)}>
+            {jobsData &&
+              jobsData.map(({ node }, i) => {
+                const { company } = node.frontmatter;
+                return (
+                  <StyledTabButton
+                    key={i}
+                    isActive={activeTabId === i}
+                    onClick={() => setActiveTabId(i)}
+                    ref={el => (tabs.current[i] = el)}
+                    id={`tab-${i}`}
+                    role="tab"
+                    tabIndex={activeTabId === i ? '0' : '-1'}
+                    aria-selected={activeTabId === i}
+                    aria-controls={`panel-${i}`}>
+                    <span>{company}</span>
+                  </StyledTabButton>
+                );
+              })}
+            <StyledHighlight activeTabId={activeTabId} />
+          </StyledTabList>
+        )}
 
         <StyledTabPanels>
           {jobsData &&
             jobsData.map(({ node }, i) => {
               const { frontmatter, html } = node;
               const { title, url, company, range } = frontmatter;
+              const iconName = getJobIcon(company);
+
+              // On mobile, show all panels; on desktop, only show the active one
+              const isVisible = isMobile || activeTabId === i;
 
               return (
-                <CSSTransition key={i} in={activeTabId === i} timeout={250} classNames="fade">
+                <CSSTransition key={i} in={isVisible} timeout={250} classNames="fade">
                   <StyledTabPanel
                     id={`panel-${i}`}
                     role="tabpanel"
-                    tabIndex={activeTabId === i ? '0' : '-1'}
+                    tabIndex={isVisible ? '0' : '-1'}
                     aria-labelledby={`tab-${i}`}
-                    aria-hidden={activeTabId !== i}
-                    hidden={activeTabId !== i}>
-                    <h3>
-                      <span>{title}</span>
-                      <span className="company">
-                        &nbsp;@&nbsp;
-                        <a href={url} className="inline-link">
-                          {company}
-                        </a>
-                      </span>
-                    </h3>
+                    aria-hidden={!isVisible}
+                    hidden={!isVisible}
+                    style={{
+                      display: isVisible ? 'block' : 'none',
+                      marginBottom: isMobile ? '50px' : '0'
+                    }}>
 
-                    <p className="range">{range}</p>
+                    <div className="job-content">
+                      <div className="job-icon">
+                        <Icon name={iconName} />
+                      </div>
+                      <div className="job-details">
+                        {/* If on mobile, show the company name as a header for each job */}
+                        {isMobile && (
+                          <h3 className="company-header">
+                            <a href={url} className="inline-link">
+                              {company}
+                            </a>
+                          </h3>
+                        )}
 
-                    <div dangerouslySetInnerHTML={{ __html: html }} />
+                        <h3>
+                          <span>{title}</span>
+                          {!isMobile && (
+                            <span className="company">
+                              &nbsp;@&nbsp;
+                              <a href={url} className="inline-link">
+                                {company}
+                              </a>
+                            </span>
+                          )}
+                        </h3>
+
+                        <p className="range">{range}</p>
+
+                        <JobDescription html={html} />
+                      </div>
+                    </div>
                   </StyledTabPanel>
                 </CSSTransition>
               );

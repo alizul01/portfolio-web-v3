@@ -1,6 +1,6 @@
 ---
 date: '2'
-title: 'Flora Quest: The Last Seed (GameJam+ 2023)'
+title: 'Memory Rewind'
 cover: './cover.png'
 external: 'https://www.youtube.com/watch?v=AWvBH-RxmzI&t=26s'
 cta: 'https://poligamedev.itch.io/floraquest-the-last-seed'
